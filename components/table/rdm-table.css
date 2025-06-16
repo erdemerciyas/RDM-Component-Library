@@ -1,0 +1,75 @@
+/* RDM Table specific styles */
+.rdm-table {
+  --rdm-table-header-bg: var(--rdm-secondary-color);
+  --rdm-table-header-color: var(--rdm-light-color);
+  --rdm-table-border: 1px solid var(--rdm-border-color);
+  --rdm-table-hover-bg: rgba(0, 123, 255, 0.05);
+  --rdm-table-stripe-bg: rgba(0, 0, 0, 0.02);
+}
+
+/* Sortable columns */
+.rdm-table th.sortable {
+  cursor: pointer;
+  position: relative;
+  padding-right: calc(var(--rdm-spacing-md) * 2);
+}
+
+.rdm-table th.sortable::after {
+  content: "↕";
+  position: absolute;
+  right: var(--rdm-spacing-sm);
+  opacity: 0.5;
+}
+
+.rdm-table th.sorted-asc::after {
+  content: "↑";
+  opacity: 1;
+}
+
+.rdm-table th.sorted-desc::after {
+  content: "↓";
+  opacity: 1;
+}
+
+/* Search input */
+.rdm-table-search {
+  margin-bottom: var(--rdm-spacing-md);
+}
+
+.rdm-table-search input {
+  padding: var(--rdm-spacing-sm);
+  border: var(--rdm-table-border);
+  border-radius: var(--rdm-border-radius);
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Pagination */
+.rdm-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--rdm-spacing-md);
+  gap: var(--rdm-spacing-sm);
+}
+
+.rdm-table-pagination button {
+  padding: var(--rdm-spacing-xs) var(--rdm-spacing-sm);
+  border: var(--rdm-table-border);
+  background: var(--rdm-light-color);
+  cursor: pointer;
+  border-radius: var(--rdm-border-radius);
+}
+
+.rdm-table-pagination button:hover {
+  background: var(--rdm-table-hover-bg);
+}
+
+.rdm-table-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rdm-table-pagination .current-page {
+  padding: var(--rdm-spacing-xs) var(--rdm-spacing-sm);
+} 

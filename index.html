@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDM UI Elements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared/styles/variables.css">
+    <link rel="stylesheet" href="shared/styles/common.css">
+    <style>
+        body {
+            font-family: var(--rdm-font-family);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: var(--rdm-dark-color);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .component-card {
+            border: 1px solid var(--rdm-border-color);
+            border-radius: var(--rdm-border-radius);
+            padding: 1.5rem;
+            background: var(--rdm-light-color);
+            transition: transform var(--rdm-transition-speed) var(--rdm-transition-timing);
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .component-card h2 {
+            color: var(--rdm-primary-color);
+            margin: 0 0 1rem;
+        }
+
+        .component-card p {
+            margin: 0 0 1.5rem;
+            color: var(--rdm-secondary-color);
+        }
+
+        .component-card .demo-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--rdm-primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--rdm-border-radius);
+            transition: background-color var(--rdm-transition-speed) var(--rdm-transition-timing);
+        }
+
+        .component-card .demo-link:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>RDM UI Elements</h1>
+        <p>A collection of modern, customizable, and accessible HTML5 components</p>
+    </div>
+
+    <div class="components-grid">
+        <div class="component-card">
+            <h2>Select Component</h2>
+            <p>A modern and accessible select component with support for search, multiple selection, and validation states.</p>
+            <a href="demos/select.html" class="demo-link">View Demo</a>
+        </div>
+
+        <div class="component-card">
+            <h2>Table Component</h2>
+            <p>A feature-rich table component with sorting, searching, and pagination capabilities.</p>
+            <a href="demos/table.html" class="demo-link">View Demo</a>
+        </div>
+    </div>
+
+    <script>
+        // Add more components here as they are developed
+    </script>
+</body>
+</html> 

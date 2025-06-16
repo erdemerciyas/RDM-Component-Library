@@ -1,0 +1,25 @@
+{
+  "name": "rdm-ui-elements",
+  "version": "1.0.0",
+  "description": "A collection of modern, customizable, and accessible HTML5 UI components with Shadow DOM isolation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server -o"
+  },
+  "keywords": [
+    "web-components",
+    "ui",
+    "select",
+    "table",
+    "html5",
+    "shadow-dom",
+    "custom-elements",
+    "javascript"
+  ],
+  "author": "Erdem Erciyas",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

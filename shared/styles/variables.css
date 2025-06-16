@@ -1,0 +1,32 @@
+:root {
+  /* Colors */
+  --rdm-primary-color: #007bff;
+  --rdm-secondary-color: #6c757d;
+  --rdm-success-color: #28a745;
+  --rdm-danger-color: #dc3545;
+  --rdm-warning-color: #ffc107;
+  --rdm-info-color: #17a2b8;
+  --rdm-light-color: #f8f9fa;
+  --rdm-dark-color: #343a40;
+  
+  /* Typography */
+  --rdm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --rdm-font-size-base: 1rem;
+  --rdm-font-size-sm: 0.875rem;
+  --rdm-font-size-lg: 1.25rem;
+  
+  /* Spacing */
+  --rdm-spacing-xs: 0.25rem;
+  --rdm-spacing-sm: 0.5rem;
+  --rdm-spacing-md: 1rem;
+  --rdm-spacing-lg: 1.5rem;
+  --rdm-spacing-xl: 2rem;
+  
+  /* Border */
+  --rdm-border-radius: 0.25rem;
+  --rdm-border-color: #dee2e6;
+  
+  /* Transitions */
+  --rdm-transition-speed: 0.2s;
+  --rdm-transition-timing: ease-in-out;
+} 

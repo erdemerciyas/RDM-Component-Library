@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDM Table Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/styles/variables.css">
+    <link rel="stylesheet" href="../shared/styles/common.css">
+    <script src="../components/table/rdm-table.js"></script>
+    <style>
+        body {
+            font-family: var(--rdm-font-family);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .demo-section {
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: var(--rdm-primary-color);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>RDM Table Component Demo</h1>
+    
+    <div class="demo-section">
+        <h2>Basic Table</h2>
+        <rdm-table id="basicTable"></rdm-table>
+    </div>
+
+    <div class="demo-section">
+        <h2>Sortable Table</h2>
+        <rdm-table id="sortableTable" sortable></rdm-table>
+    </div>
+
+    <div class="demo-section">
+        <h2>Searchable Table</h2>
+        <rdm-table id="searchableTable" searchable></rdm-table>
+    </div>
+
+    <div class="demo-section">
+        <h2>Pageable Table</h2>
+        <rdm-table id="pageableTable" pageable></rdm-table>
+    </div>
+
+    <script>
+        // Sample data for tables
+        const data = [
+            { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
+            { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
+            { id: 3, name: "Bob Johnson", email: "bob@example.com", role: "Editor" },
+            { id: 4, name: "Alice Brown", email: "alice@example.com", role: "User" },
+            { id: 5, name: "Charlie Wilson", email: "charlie@example.com", role: "Admin" }
+        ];
+
+        const columns = [
+            { field: 'id', header: 'ID' },
+            { field: 'name', header: 'Name' },
+            { field: 'email', header: 'Email' },
+            { field: 'role', header: 'Role' }
+        ];
+
+        // Initialize tables with data
+        document.querySelectorAll('rdm-table').forEach(table => {
+            table.setAttribute('data', JSON.stringify(data));
+            table.setAttribute('columns', JSON.stringify(columns));
+        });
+    </script>
+</body>
+</html> 
