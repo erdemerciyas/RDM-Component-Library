@@ -517,7 +517,7 @@ Katkılarınızı memnuniyetle karşılıyoruz!
 
 - 🐛 **Bug Report**: [GitHub Issues](https://github.com/erdemerciyas/RDM-Component-Library/issues)
 - 💡 **Feature Request**: [GitHub Discussions](https://github.com/erdemerciyas/RDM-Component-Library/discussions)
-- 📧 **E-posta**: erdem@example.com
+- 📧 **E-posta**: erdem.erciyas@gmail.com
 
 ---
 
