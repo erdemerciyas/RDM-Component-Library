@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Grid - RDM Components</title>
+  <meta name="description" content="Advanced data grid with sorting, filtering, pagination, and search">
+  
+  <!-- CSS Imports -->
+  <link rel="stylesheet" href="../shared/styles/theme.css">
+  <link rel="stylesheet" href="../shared/styles/variables.css">
+  <link rel="stylesheet" href="../components/table/rdm-datagrid.css">
+  
+  <style>
+    /* Demo Page Styles */
+    body {
+      background: #ffffff !important;
+    }
+    
+    .info-box {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #212529;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-box h3 {
+      margin-bottom: 1rem;
+      color: #212529;
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-box ul {
+      margin-left: 1.25rem;
+      list-style: disc;
+    }
+    
+    .info-box li {
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+      color: #495057;
+    }
+    
+    .info-box strong {
+      color: #212529;
+      font-weight: 600;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .feature-card {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card h4 {
+      color: #212529;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .feature-card p {
+      color: #495057;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    
+    .feature-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      color: #6c757d;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+    
+    .feature-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #28a745;
+      font-weight: bold;
+    }
+    
+    .status-indicator {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #6c757d;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-1rem);
+      transition: all 0.3s ease;
+      border: 1px solid #6c757d;
+    }
+    
+    .status-indicator.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .status-indicator.success {
+      background: #28a745;
+      border-color: #28a745;
+    }
+    
+    .status-indicator.info {
+      background: #17a2b8;
+      border-color: #17a2b8;
+    }
+    
+    .status-indicator.warning {
+      background: #ffc107;
+      color: #212529;
+      border-color: #ffc107;
+    }
+    
+    /* Badge styles for status column */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 4px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    
+    .badge-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .badge-secondary {
+      background: #e2e3e5;
+      color: #383d41;
+      border: 1px solid #d6d8db;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .feature-card,
+      .info-box {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .status-indicator {
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.375rem 0.75rem;
+      }
+    }
+
+    /* Code Preview Styles */
+    .code-preview {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .code-preview__header {
+      background: #e9ecef;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .code-preview__title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #212529;
+    }
+
+    .code-preview__toggle {
+      background: #6c757d;
+      color: white;
+      border: 1px solid #6c757d;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .code-preview__toggle:hover {
+      background: #5a6268;
+      border-color: #545b62;
+    }
+
+    .code-preview__toggle:active {
+      background: #4e555b;
+    }
+
+         .code-preview__content {
+       max-height: 0;
+       overflow: auto;
+       transition: max-height 0.3s ease;
+       position: relative;
+     }
+
+    .code-preview__content.show {
+      max-height: 600px;
+    }
+
+    .code-preview__code {
+      background: #ffffff;
+      padding: 1.5rem;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: #212529;
+      white-space: pre-wrap;
+      border: none;
+      overflow-x: auto;
+    }
+
+    .code-preview__copy {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(108, 117, 125, 0.9);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      z-index: 10;
+    }
+
+    .code-preview__copy:hover {
+      background: rgba(90, 98, 104, 0.9);
+    }
+  </style>
+</head>
+<body>
+  <!-- Status Indicator -->
+  <div class="status-indicator" id="statusIndicator">
+    ✅ Data Grid yüklendi
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <h3>📊 Gelişmiş Data Grid Tablosu</h3>
+    <ul>
+      <li><strong>Sıralama:</strong> Tüm sütunlarda çift yönlü sıralama</li>
+      <li><strong>Filtreleme:</strong> Departman, durum ve maaş filtreleri</li>
+      <li><strong>Arama:</strong> Tüm alanlarda gerçek zamanlı arama</li>
+      <li><strong>Sayfalama:</strong> Özelleştirilebilir sayfa boyutu</li>
+      <li><strong>Seçim:</strong> Tekli ve toplu satır seçimi</li>
+      <li><strong>Dışa Aktarma:</strong> CSV formatında veri dışa aktarma</li>
+    </ul>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="features-grid">
+    <div class="feature-card">
+      <h4>🔍 Gelişmiş Arama</h4>
+      <p>Tüm tablo verilerinde gerçek zamanlı arama yapabilirsiniz.</p>
+      <ul class="feature-list">
+        <li>Anlık sonuçlar</li>
+        <li>Tüm sütunlarda arama</li>
+        <li>Büyük/küçük harf duyarsız</li>
+      </ul>
+    </div>
+    
+    <div class="feature-card">
+      <h4>📋 Akıllı Filtreleme</h4>
+      <p>Departman, durum ve maaş aralığına göre verileri filtreleyin.</p>
+      <ul class="feature-list">
+        <li>Çoklu filtre desteği</li>
+        <li>Aralık filtreleme</li>
+        <li>Hızlı temizleme</li>
+      </ul>
+    </div>
+    
+    <div class="feature-card">
+      <h4>⚡ Hızlı Sıralama</h4>
+      <p>Herhangi bir sütuna tıklayarak verileri sıralayın.</p>
+      <ul class="feature-list">
+        <li>Artan/azalan sıralama</li>
+        <li>Farklı veri tipleri</li>
+        <li>Görsel geri bildirim</li>
+      </ul>
+    </div>
+    
+    <div class="feature-card">
+      <h4>📄 Sayfalama</h4>
+      <p>Büyük veri setlerini sayfalara bölerek görüntüleyin.</p>
+      <ul class="feature-list">
+        <li>Özelleştirilebilir sayfa boyutu</li>
+        <li>Hızlı sayfa geçişi</li>
+        <li>Kayıt sayısı bilgisi</li>
+      </ul>
+    </div>
+    
+    <div class="feature-card">
+      <h4>✅ Satır Seçimi</h4>
+      <p>Tekli veya toplu satır seçimi yaparak işlemler gerçekleştirin.</p>
+      <ul class="feature-list">
+        <li>Toplu seçim</li>
+        <li>Seçim sayacı</li>
+        <li>Görsel işaretleme</li>
+      </ul>
+    </div>
+    
+    <div class="feature-card">
+      <h4>📥 Dışa Aktarma</h4>
+      <p>Seçili veya tüm verileri CSV formatında indirin.</p>
+      <ul class="feature-list">
+        <li>CSV formatı</li>
+        <li>Seçili kayıtlar</li>
+        <li>Otomatik dosya adı</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Data Grid Container -->
+  <div id="dataGridContainer"></div>
+
+  <!-- HTML Code Preview -->
+  <div class="code-preview" style="margin-top: 2rem;">
+    <div class="code-preview__header">
+      <h5 class="code-preview__title">HTML + CSS + JavaScript Kodu</h5>
+      <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+    </div>
+    <div class="code-preview__content">
+      <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+      <pre class="code-preview__code">&lt;!-- HTML Structure --&gt;
+&lt;div id="dataGridContainer"&gt;&lt;/div&gt;
+
+&lt;!-- CSS Imports --&gt;
+&lt;link rel="stylesheet" href="../components/table/rdm-datagrid.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="../components/table/rdm-datagrid.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+// Data Grid JavaScript ile otomatik oluşturulur
+// rdm-datagrid.js dosyasında aşağıdaki özellikler bulunur:
+
+// ✅ Özellikler:
+// - Sıralama: Tüm sütunlarda çift yönlü sıralama
+// - Filtreleme: Departman, durum ve maaş filtreleri  
+// - Arama: Tüm alanlarda gerçek zamanlı arama
+// - Sayfalama: Özelleştirilebilir sayfa boyutu
+// - Seçim: Tekli ve toplu satır seçimi
+// - Dışa Aktarma: CSV formatında veri dışa aktarma
+
+// 🎮 Kullanım:
+// 1. Arama kutusu - Gerçek zamanlı arama
+// 2. Filtre butonu - Gelişmiş filtreleme  
+// 3. Sütun başlıkları - Sıralama
+// 4. Checkbox'lar - Satır seçimi
+// 5. Dışa Aktar butonu - CSV indirme
+
+// 📊 Veri Yapısı:
+// Tablo 150 adet örnek çalışan verisi ile doldurulur
+// Her kayıt: ID, Ad, Soyad, Email, Departman, Pozisyon, Maaş, Durum
+&lt;/script&gt;</pre>
+    </div>
+  </div>
+
+      <!-- JavaScript -->
+    <script src="../shared/components/navigation.js"></script>
+    <script src="../components/table/rdm-datagrid.js"></script>
+  
+  <script>
+    // Status indicator helper
+    function showStatus(message, type = 'success') {
+      const indicator = document.getElementById('statusIndicator');
+      
+      // Remove existing type classes
+      indicator.classList.remove('success', 'info', 'warning');
+      
+      // Add new type class
+      indicator.classList.add(type);
+      indicator.textContent = message;
+      indicator.classList.add('show');
+      
+      setTimeout(() => {
+        indicator.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Page load handler
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🎯 Data Grid Demo Loaded');
+      
+      // Show initial status
+      setTimeout(() => {
+        showStatus('🎉 Data Grid hazır! 150 kayıt yüklendi.');
+      }, 1000);
+      
+      // Performance monitoring
+      window.addEventListener('load', function() {
+        const loadTime = performance.now();
+        console.log('⚡ Page Load Time:', loadTime.toFixed(2) + 'ms');
+        
+        if (loadTime > 2000) {
+          showStatus('⚠️ Yavaş yükleme tespit edildi', 'warning');
+        }
+      });
+    });
+    
+    // Keyboard shortcuts info
+    setTimeout(() => {
+      console.log('⌨️ Data Grid Özellikleri:');
+      console.log('🔍 Arama kutusu - Gerçek zamanlı arama');
+      console.log('🔽 Filtre butonu - Gelişmiş filtreleme');
+      console.log('📊 Sütun başlıkları - Sıralama');
+      console.log('☑️ Checkbox\'lar - Satır seçimi');
+      console.log('📥 Dışa Aktar - CSV indirme');
+    }, 2000);
+
+    // Code preview functions
+    function toggleCodePreview(button) {
+      const codeContent = button.closest('.code-preview').querySelector('.code-preview__content');
+      const isVisible = codeContent.classList.contains('show');
+
+      if (isVisible) {
+        codeContent.classList.remove('show');
+        button.innerHTML = '⌨️ Kod';
+      } else {
+        codeContent.classList.add('show');
+        button.innerHTML = '✖️ Gizle';
+      }
+    }
+
+    function copyCode(button) {
+      const codeElement = button.closest('.code-preview__content').querySelector('.code-preview__code');
+      const code = codeElement.textContent;
+
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = button.textContent;
+        button.textContent = '✅ Kopyalandı!';
+        button.style.background = '#28a745';
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = 'rgba(255, 255, 255, 0.1)';
+        }, 2000);
+      }).catch(() => {
+        button.textContent = '❌ Hata!';
+        setTimeout(() => {
+          button.textContent = '📋 Kopyala';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html> 

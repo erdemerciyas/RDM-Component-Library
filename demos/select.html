@@ -1,77 +1,1373 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RDM Select Demo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../shared/styles/variables.css">
-    <link rel="stylesheet" href="../shared/styles/common.css">
-    <script src="../components/select/rdm-select.js"></script>
-    <style>
-        body {
-            font-family: var(--rdm-font-family);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .demo-section {
-            margin-bottom: 2rem;
-        }
-        h2 {
-            color: var(--rdm-primary-color);
-            margin-bottom: 1rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Select - RDM Components</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../shared/styles/common.css">
+  <link rel="stylesheet" href="../shared/styles/theme.css">
+  <link rel="stylesheet" href="../components/select/rdm-select.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
+
 <body>
-    <h1>RDM Select Component Demo</h1>
-    
-    <div class="demo-section">
-        <h2>Basic Usage</h2>
-        <rdm-select>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </rdm-select>
+
+
+  <section
+    style="max-width: 480px; margin: 0 auto 32px auto; padding: 24px; background: #f8fafc; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <h2 style="font-size: 1.2rem; margin-bottom: 12px; color: #1e293b;">Canlı Demo</h2>
+    <rdm-select label="Ülke Seçin" placeholder="Bir ülke seçin" clearable>
+      <rdm-select-option value="tr">Türkiye</rdm-select-option>
+      <rdm-select-option value="us">Amerika Birleşik Devletleri</rdm-select-option>
+      <rdm-select-option value="de">Almanya</rdm-select-option>
+      <rdm-select-option value="fr">Fransa</rdm-select-option>
+    </rdm-select>
+  </section>
+
+  <main class="container">
+    <div class="header">
+      <h2>Kullanım ve Özellikler</h2>
+      <p>Farklı varyasyonlar ve tüm özellikler aşağıda örneklenmiştir.</p>
     </div>
 
     <div class="demo-section">
-        <h2>Multiple Selection</h2>
-        <rdm-select multiple>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </rdm-select>
+      <h3>Temel Kullanım</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>JavaScript ile Options</h4>
+          <rdm-select id="basic-select" label="Ülke Seçin" placeholder="Bir ülke seçin" clearable>
+          </rdm-select>
+          <div class="result" id="basic-result">Seçilen: -</div>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML + JavaScript</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select id="basic-select" 
+  label="Ülke Seçin" 
+  placeholder="Bir ülke seçin"
+  clearable&gt;
+&lt;/rdm-select&gt;
+
+&lt;script&gt;
+const basicSelect = document.getElementById('basic-select');
+basicSelect.options = [
+  { value: 'tr', label: 'Türkiye' },
+  { value: 'us', label: 'Amerika Birleşik Devletleri' },
+  { value: 'de', label: 'Almanya' },
+  { value: 'fr', label: 'Fransa' }
+];
+&lt;/script&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>HTML ile Options</h4>
+          <rdm-select label="Şehir Seçin" placeholder="Bir şehir seçin" clearable>
+            <rdm-select-option value="istanbul">İstanbul</rdm-select-option>
+            <rdm-select-option value="ankara">Ankara</rdm-select-option>
+            <rdm-select-option value="izmir">İzmir</rdm-select-option>
+            <rdm-select-option value="bursa">Bursa</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Şehir Seçin" 
+  placeholder="Bir şehir seçin" 
+  clearable&gt;
+  &lt;rdm-select-option value="istanbul"&gt;İstanbul&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="ankara"&gt;Ankara&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="izmir"&gt;İzmir&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="bursa"&gt;Bursa&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="demo-section">
-        <h2>With Search</h2>
-        <rdm-select searchable>
-            <option value="1">Apple</option>
-            <option value="2">Banana</option>
-            <option value="3">Cherry</option>
-            <option value="4">Date</option>
-            <option value="5">Elderberry</option>
-        </rdm-select>
+      <h3>Boyutlar ve Durumlar</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Küçük Boyut</h4>
+          <rdm-select size="small" label="Küçük Select" placeholder="Küçük boyut" clearable>
+            <option value="1">Seçenek 1</option>
+            <option value="2">Seçenek 2</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  size="small" 
+  label="Küçük Select" 
+  placeholder="Küçük boyut"
+  clearable&gt;
+  &lt;option value="1"&gt;Seçenek 1&lt;/option&gt;
+  &lt;option value="2"&gt;Seçenek 2&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Büyük Boyut</h4>
+          <rdm-select size="large" label="Büyük Select" placeholder="Büyük boyut" clearable>
+            <option value="1">Seçenek 1</option>
+            <option value="2">Seçenek 2</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  size="large" 
+  label="Büyük Select" 
+  placeholder="Büyük boyut"
+  clearable&gt;
+  &lt;option value="1"&gt;Seçenek 1&lt;/option&gt;
+  &lt;option value="2"&gt;Seçenek 2&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Devre Dışı</h4>
+          <rdm-select disabled label="Devre Dışı Select" placeholder="Kullanılamaz">
+            <option value="1">Seçenek 1</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  disabled 
+  label="Devre Dışı Select" 
+  placeholder="Kullanılamaz"&gt;
+  &lt;option value="1"&gt;Seçenek 1&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Label Olmadan</h4>
+          <rdm-select placeholder="Sadece placeholder" clearable>
+            <rdm-select-option value="opt1">Seçenek 1</rdm-select-option>
+            <rdm-select-option value="opt2">Seçenek 2</rdm-select-option>
+            <rdm-select-option value="opt3">Seçenek 3</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  placeholder="Sadece placeholder"
+  clearable&gt;
+  &lt;rdm-select-option value="opt1"&gt;Seçenek 1&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="opt2"&gt;Seçenek 2&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="opt3"&gt;Seçenek 3&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Hata Durumu</h4>
+          <rdm-select label="Gerekli Alan" placeholder="Seçim yapın" required invalid-text="Bu alan zorunludur!"
+            clearable>
+            <option value="1">Seçenek 1</option>
+            <option value="2">Seçenek 2</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Gerekli Alan" 
+  placeholder="Seçim yapın" 
+  required 
+  invalid-text="Bu alan zorunludur!"
+  clearable&gt;
+  &lt;option value="1"&gt;Seçenek 1&lt;/option&gt;
+  &lt;option value="2"&gt;Seçenek 2&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Icon Örnekleri -->
+    <div class="demo-section">
+      <h3>Icon Örnekleri</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Sol Icon</h4>
+          <rdm-select label="Ülke Seçin" placeholder="Ülke seçin" icon="🌍" icon-position="left">
+            <rdm-select-option value="tr">Türkiye</rdm-select-option>
+            <rdm-select-option value="us">Amerika</rdm-select-option>
+            <rdm-select-option value="de">Almanya</rdm-select-option>
+            <rdm-select-option value="fr">Fransa</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Ülke Seçin" 
+  placeholder="Ülke seçin"
+  icon="🌍"
+  icon-position="left"&gt;
+  &lt;rdm-select-option value="tr"&gt;Türkiye&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="us"&gt;Amerika&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="de"&gt;Almanya&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="fr"&gt;Fransa&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Sağ Icon</h4>
+          <rdm-select label="Kategori" placeholder="Kategori seçin" icon="📁" icon-position="right">
+            <rdm-select-option value="tech">Teknoloji</rdm-select-option>
+            <rdm-select-option value="design">Tasarım</rdm-select-option>
+            <rdm-select-option value="marketing">Pazarlama</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Kategori" 
+  placeholder="Kategori seçin"
+  icon="📁"
+  icon-position="right"&gt;
+  &lt;rdm-select-option value="tech"&gt;Teknoloji&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="design"&gt;Tasarım&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="marketing"&gt;Pazarlama&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Kullanıcı Icon (Font Awesome)</h4>
+          <rdm-select label="Kullanıcı Tipi" placeholder="Tip seçin" icon-class="fas fa-user" icon-position="left"
+            size="large">
+            <rdm-select-option value="admin">Admin</rdm-select-option>
+            <rdm-select-option value="user">Kullanıcı</rdm-select-option>
+            <rdm-select-option value="guest">Misafir</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Kullanıcı Tipi" 
+  placeholder="Tip seçin"
+  icon-class="fas fa-user"
+  icon-position="left"
+  size="large"&gt;
+  &lt;rdm-select-option value="admin"&gt;Admin&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="user"&gt;Kullanıcı&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="guest"&gt;Misafir&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Para Birimi (Font Awesome)</h4>
+          <rdm-select label="Para Birimi" placeholder="Para birimi seçin" icon-class="fas fa-dollar-sign"
+            icon-position="left" clearable>
+            <rdm-select-option value="try">TRY - Türk Lirası</rdm-select-option>
+            <rdm-select-option value="usd">USD - Amerikan Doları</rdm-select-option>
+            <rdm-select-option value="eur">EUR - Euro</rdm-select-option>
+            <rdm-select-option value="gbp">GBP - İngiliz Sterlini</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Para Birimi" 
+  placeholder="Para birimi seçin"
+  icon-class="fas fa-dollar-sign"
+  icon-position="left"
+  clearable&gt;
+  &lt;rdm-select-option value="try"&gt;TRY - Türk Lirası&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="usd"&gt;USD - Amerikan Doları&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="eur"&gt;EUR - Euro&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="gbp"&gt;GBP - İngiliz Sterlini&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Zaman Dilimi (Sağ Icon)</h4>
+          <rdm-select label="Zaman Dilimi" placeholder="Zaman dilimi seçin" icon-class="fas fa-clock"
+            icon-position="right" search-bar>
+            <rdm-select-option value="ist">İstanbul (UTC+3)</rdm-select-option>
+            <rdm-select-option value="utc">UTC (UTC+0)</rdm-select-option>
+            <rdm-select-option value="est">New York (UTC-5)</rdm-select-option>
+            <rdm-select-option value="pst">Los Angeles (UTC-8)</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Zaman Dilimi" 
+  placeholder="Zaman dilimi seçin"
+  icon-class="fas fa-clock"
+  icon-position="right"
+  search-bar&gt;
+  &lt;rdm-select-option value="ist"&gt;İstanbul (UTC+3)&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="utc"&gt;UTC (UTC+0)&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="est"&gt;New York (UTC-5)&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="pst"&gt;Los Angeles (UTC-8)&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>E-posta (Label Olmadan)</h4>
+          <rdm-select placeholder="E-posta sağlayıcısı seçin" icon-class="fas fa-envelope" icon-position="left"
+            clearable>
+            <rdm-select-option value="gmail">Gmail</rdm-select-option>
+            <rdm-select-option value="outlook">Outlook</rdm-select-option>
+            <rdm-select-option value="yahoo">Yahoo Mail</rdm-select-option>
+            <rdm-select-option value="icloud">iCloud Mail</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  placeholder="E-posta sağlayıcısı seçin"
+  icon-class="fas fa-envelope"
+  icon-position="left"
+  clearable&gt;
+  &lt;rdm-select-option value="gmail"&gt;Gmail&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="outlook"&gt;Outlook&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="yahoo"&gt;Yahoo Mail&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="icloud"&gt;iCloud Mail&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Çoklu Seçim + Icon</h4>
+          <rdm-select label="Diller" placeholder="Dil seçin" icon="🗣️" icon-position="left" multiple
+            option-style="checkbox">
+            <rdm-select-option value="tr">Türkçe</rdm-select-option>
+            <rdm-select-option value="en">English</rdm-select-option>
+            <rdm-select-option value="de">Deutsch</rdm-select-option>
+            <rdm-select-option value="fr">Français</rdm-select-option>
+            <rdm-select-option value="es">Español</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Diller" 
+  placeholder="Dil seçin"
+  icon="🗣️"
+  icon-position="left"
+  multiple
+  option-style="checkbox"&gt;
+  &lt;rdm-select-option value="tr"&gt;Türkçe&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="en"&gt;English&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="de"&gt;Deutsch&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="fr"&gt;Français&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="es"&gt;Español&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="demo-section">
-        <h2>Validation States</h2>
-        <rdm-select validation="success">
-            <option value="1">Valid Option</option>
-            <option value="2">Another Valid Option</option>
-        </rdm-select>
-        <br><br>
-        <rdm-select validation="error">
-            <option value="1">Invalid Option</option>
-            <option value="2">Another Invalid Option</option>
-        </rdm-select>
-        <br><br>
-        <rdm-select validation="warning">
-            <option value="1">Warning Option</option>
-            <option value="2">Another Warning Option</option>
-        </rdm-select>
+      <h3>Validation Durumları</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Hata Durumu</h4>
+          <rdm-select label="E-posta Adresi" placeholder="E-posta girin" required validation-state="invalid"
+            invalid-text="Geçerli bir e-posta adresi girin!" clearable>
+            <option value="invalid@">invalid@</option>
+            <option value="test@example.com">test@example.com</option>
+            <option value="user@domain.org">user@domain.org</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="E-posta Adresi" 
+  placeholder="E-posta girin"
+  required
+  validation-state="invalid"
+  invalid-text="Geçerli bir e-posta adresi girin!"
+  clearable&gt;
+  &lt;option value="invalid@"&gt;invalid@&lt;/option&gt;
+  &lt;option value="test@example.com"&gt;test@example.com&lt;/option&gt;
+  &lt;option value="user@domain.org"&gt;user@domain.org&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Uyarı Durumu</h4>
+          <rdm-select label="Şifre Gücü" placeholder="Şifre gücü seçin" validation-state="warning"
+            warning-text="Güçlü şifre önerilir!" clearable>
+            <option value="weak">Zayıf</option>
+            <option value="medium">Orta</option>
+            <option value="strong">Güçlü</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Şifre Gücü" 
+  placeholder="Şifre gücü seçin"
+  validation-state="warning"
+  warning-text="Güçlü şifre önerilir!"
+  clearable&gt;
+  &lt;option value="weak"&gt;Zayıf&lt;/option&gt;
+  &lt;option value="medium"&gt;Orta&lt;/option&gt;
+  &lt;option value="strong"&gt;Güçlü&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Başarı Durumu</h4>
+          <rdm-select label="Doğrulama Durumu" placeholder="Durum seçin" validation-state="success"
+            success-text="Başarıyla doğrulandı!" value="verified" clearable>
+            <option value="pending">Beklemede</option>
+            <option value="verified">Doğrulandı</option>
+            <option value="rejected">Reddedildi</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Doğrulama Durumu" 
+  placeholder="Durum seçin"
+  validation-state="success"
+  success-text="Başarıyla doğrulandı!"
+  value="verified"
+  clearable&gt;
+  &lt;option value="pending"&gt;Beklemede&lt;/option&gt;
+  &lt;option value="verified"&gt;Doğrulandı&lt;/option&gt;
+  &lt;option value="rejected"&gt;Reddedildi&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Zorunlu Alan</h4>
+          <rdm-select label="Ülke" placeholder="Ülke seçin" required help-text="Bu alan zorunludur" clearable>
+            <option value="tr">Türkiye</option>
+            <option value="us">Amerika</option>
+            <option value="de">Almanya</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Ülke" 
+  placeholder="Ülke seçin"
+  required
+  help-text="Bu alan zorunludur"
+  clearable&gt;
+  &lt;option value="tr"&gt;Türkiye&lt;/option&gt;
+  &lt;option value="us"&gt;Amerika&lt;/option&gt;
+  &lt;option value="de"&gt;Almanya&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Custom Mesajlar</h4>
+          <rdm-select label="Özel Validation" placeholder="Seçim yapın" validation-state="invalid"
+            invalid-text="Özel hata mesajı: Bu seçim geçersiz!" clearable>
+            <option value="option1">Seçenek 1</option>
+            <option value="option2">Seçenek 2</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Özel Validation" 
+  placeholder="Seçim yapın"
+  validation-state="invalid"
+  invalid-text="Özel hata mesajı: Bu seçim geçersiz!"
+  clearable&gt;
+  &lt;option value="option1"&gt;Seçenek 1&lt;/option&gt;
+  &lt;option value="option2"&gt;Seçenek 2&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Dinamik Validation</h4>
+          <rdm-select id="dynamic-validation" label="Dinamik Durum" placeholder="Bir seçenek seçin"
+            help-text="Seçiminize göre validation değişir" clearable>
+            <option value="good">İyi Seçim</option>
+            <option value="warning">Uyarı Seçimi</option>
+            <option value="bad">Kötü Seçim</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML + JavaScript</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select id="dynamic-validation"
+  label="Dinamik Durum" 
+  placeholder="Bir seçenek seçin"
+  help-text="Seçiminize göre validation değişir"
+  clearable&gt;
+  &lt;option value="good"&gt;İyi Seçim&lt;/option&gt;
+  &lt;option value="warning"&gt;Uyarı Seçimi&lt;/option&gt;
+  &lt;option value="bad"&gt;Kötü Seçim&lt;/option&gt;
+&lt;/rdm-select&gt;
+
+&lt;script&gt;
+// Dinamik validation örneği
+const dynamicValidation = document.getElementById('dynamic-validation');
+dynamicValidation.addEventListener('rdm-select', (e) => {
+  const value = e.detail.value;
+  if (value === 'good') {
+    dynamicValidation.setAttribute('validation-state', 'success');
+    dynamicValidation.setAttribute('success-text', 'Mükemmel seçim!');
+  } else if (value === 'warning') {
+    dynamicValidation.setAttribute('validation-state', 'warning');
+    dynamicValidation.setAttribute('warning-text', 'Dikkatli olun!');
+  } else if (value === 'bad') {
+    dynamicValidation.setAttribute('validation-state', 'invalid');
+    dynamicValidation.setAttribute('invalid-text', 'Kötü seçim!');
+  }
+});
+&lt;/script&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="demo-section">
+      <h3>Gelişmiş Özellikler</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Arama Özellikli</h4>
+          <rdm-select id="search-select" label="Programlama Dili" placeholder="Dil seçin" search-bar
+            search-bar-placeholder="Dil ara..." search-not-found-text="Sonuç bulunamadı" clearable>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML + JavaScript</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select id="search-select"
+  label="Programlama Dili" 
+  placeholder="Dil seçin"
+  search-bar
+  search-bar-placeholder="Dil ara..."
+  search-not-found-text="Sonuç bulunamadı"
+  clearable&gt;
+&lt;/rdm-select&gt;
+
+&lt;script&gt;
+const searchSelect = document.getElementById('search-select');
+searchSelect.options = [
+  { value: 'js', label: 'JavaScript' },
+  { value: 'ts', label: 'TypeScript' },
+  { value: 'py', label: 'Python' },
+  { value: 'java', label: 'Java' },
+  { value: 'cs', label: 'C#' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'php', label: 'PHP' },
+  { value: 'ruby', label: 'Ruby' },
+  { value: 'go', label: 'Go' },
+  { value: 'rust', label: 'Rust' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'kotlin', label: 'Kotlin' }
+];
+&lt;/script&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Yardım Metni ile</h4>
+          <rdm-select label="Deneyim Seviyesi" placeholder="Seviye seçin" help-text="Mevcut deneyim seviyenizi seçin"
+            clearable>
+            <rdm-select-option value="beginner">Başlangıç</rdm-select-option>
+            <rdm-select-option value="intermediate">Orta</rdm-select-option>
+            <rdm-select-option value="advanced">İleri</rdm-select-option>
+            <rdm-select-option value="expert">Uzman</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  label="Deneyim Seviyesi" 
+  placeholder="Seviye seçin"
+  help-text="Mevcut deneyim seviyenizi seçin"
+  clearable&gt;
+  &lt;rdm-select-option value="beginner"&gt;Başlangıç&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="intermediate"&gt;Orta&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="advanced"&gt;İleri&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="expert"&gt;Uzman&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h3>Option Borders</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Border Olmadan (Varsayılan)</h4>
+          <rdm-select name="no-borders" label="Standart Görünüm" placeholder="Seçenek seçin">
+            <rdm-select-option value="option1">Seçenek 1</rdm-select-option>
+            <rdm-select-option value="option2">Seçenek 2</rdm-select-option>
+            <rdm-select-option value="option3">Seçenek 3</rdm-select-option>
+            <rdm-select-option value="option4">Seçenek 4</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="no-borders" 
+  label="Standart Görünüm" 
+  placeholder="Seçenek seçin"&gt;
+  &lt;rdm-select-option value="option1"&gt;Seçenek 1&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option2"&gt;Seçenek 2&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option3"&gt;Seçenek 3&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option4"&gt;Seçenek 4&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Border ile</h4>
+          <rdm-select name="with-borders" label="Çizgili Görünüm" placeholder="Seçenek seçin" option-borders>
+            <rdm-select-option value="option1">Seçenek 1</rdm-select-option>
+            <rdm-select-option value="option2">Seçenek 2</rdm-select-option>
+            <rdm-select-option value="option3">Seçenek 3</rdm-select-option>
+            <rdm-select-option value="option4">Seçenek 4</rdm-select-option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="with-borders" 
+  label="Çizgili Görünüm" 
+  placeholder="Seçenek seçin"
+  option-borders&gt;
+  &lt;rdm-select-option value="option1"&gt;Seçenek 1&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option2"&gt;Seçenek 2&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option3"&gt;Seçenek 3&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="option4"&gt;Seçenek 4&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h3>Option Stilleri</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>Checkbox Stili</h4>
+          <rdm-select name="checkbox-style" label="Checkbox Görünüm" placeholder="Seçenekleri işaretle"
+            option-style="checkbox" multiple>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="js">JavaScript</option>
+            <option value="react">React</option>
+            <option value="vue">Vue.js</option>
+            <option value="angular">Angular</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="checkbox-style" 
+  label="Checkbox Görünüm"
+  placeholder="Seçenekleri işaretle" 
+  option-style="checkbox"
+  multiple&gt;
+  &lt;option value="html"&gt;HTML&lt;/option&gt;
+  &lt;option value="css"&gt;CSS&lt;/option&gt;
+  &lt;option value="js"&gt;JavaScript&lt;/option&gt;
+  &lt;option value="react"&gt;React&lt;/option&gt;
+  &lt;option value="vue"&gt;Vue.js&lt;/option&gt;
+  &lt;option value="angular"&gt;Angular&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Radio Stili</h4>
+          <rdm-select name="radio-style" label="Radio Görünüm" placeholder="Bir seçenek seç" option-style="radio">
+            <option value="beginner">Başlangıç</option>
+            <option value="intermediate">Orta</option>
+            <option value="advanced">İleri</option>
+            <option value="expert">Uzman</option>
+            <option value="master">Master</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="radio-style" 
+  label="Radio Görünüm"
+  placeholder="Bir seçenek seç"
+  option-style="radio"&gt;
+  &lt;option value="beginner"&gt;Başlangıç&lt;/option&gt;
+  &lt;option value="intermediate"&gt;Orta&lt;/option&gt;
+  &lt;option value="advanced"&gt;İleri&lt;/option&gt;
+  &lt;option value="expert"&gt;Uzman&lt;/option&gt;
+  &lt;option value="master"&gt;Master&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Checkbox + Border</h4>
+          <rdm-select name="checkbox-border" label="Checkbox + Çizgi" placeholder="Çoklu seçim" option-style="checkbox"
+            option-borders multiple>
+            <option value="frontend">Frontend Development</option>
+            <option value="backend">Backend Development</option>
+            <option value="fullstack">Full Stack Development</option>
+            <option value="mobile">Mobile Development</option>
+            <option value="devops">DevOps</option>
+            <option value="ui">UI/UX Design</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="checkbox-border" 
+  label="Checkbox + Çizgi"
+  placeholder="Çoklu seçim"
+  option-style="checkbox"
+  option-borders
+  multiple&gt;
+  &lt;option value="frontend"&gt;Frontend Development&lt;/option&gt;
+  &lt;option value="backend"&gt;Backend Development&lt;/option&gt;
+  &lt;option value="fullstack"&gt;Full Stack Development&lt;/option&gt;
+  &lt;option value="mobile"&gt;Mobile Development&lt;/option&gt;
+  &lt;option value="devops"&gt;DevOps&lt;/option&gt;
+  &lt;option value="ui"&gt;UI/UX Design&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-item">
+          <h4>Radio + Border</h4>
+          <rdm-select name="radio-border" label="Radio + Çizgi" placeholder="Tek seçim" option-style="radio"
+            option-borders>
+            <option value="junior">Junior Developer</option>
+            <option value="mid">Mid-Level Developer</option>
+            <option value="senior">Senior Developer</option>
+            <option value="lead">Lead Developer</option>
+            <option value="architect">Software Architect</option>
+            <option value="manager">Engineering Manager</option>
+          </rdm-select>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;rdm-select 
+  name="radio-border" 
+  label="Radio + Çizgi"
+  placeholder="Tek seçim"
+  option-style="radio"
+  option-borders&gt;
+  &lt;option value="junior"&gt;Junior Developer&lt;/option&gt;
+  &lt;option value="mid"&gt;Mid-Level Developer&lt;/option&gt;
+  &lt;option value="senior"&gt;Senior Developer&lt;/option&gt;
+  &lt;option value="lead"&gt;Lead Developer&lt;/option&gt;
+  &lt;option value="architect"&gt;Software Architect&lt;/option&gt;
+  &lt;option value="manager"&gt;Engineering Manager&lt;/option&gt;
+&lt;/rdm-select&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h3>Programatik Kontrol</h3>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h4>API Metodları</h4>
+          <rdm-select id="api-select" label="Kontrol Edilebilir Select" placeholder="Seçim yapın" clearable>
+            <rdm-select-option value="red">Kırmızı</rdm-select-option>
+            <rdm-select-option value="green">Yeşil</rdm-select-option>
+            <rdm-select-option value="blue">Mavi</rdm-select-option>
+          </rdm-select>
+
+          <div class="button-group">
+            <button class="btn" onclick="apiSelect.open()">Aç</button>
+            <button class="btn" onclick="apiSelect.close()">Kapat</button>
+            <button class="btn" onclick="apiSelect.value = 'green'">Yeşil Seç</button>
+            <button class="btn" onclick="apiSelect.clear()">Temizle</button>
+          </div>
+
+          <div class="result" id="api-result">Seçilen: -</div>
+
+          <div class="code-preview">
+            <div class="code-preview__header">
+              <h5 class="code-preview__title">HTML + JavaScript Kodu</h5>
+              <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+              <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+              <pre class="code-preview__code">&lt;!-- HTML --&gt;
+&lt;rdm-select id="api-select" 
+  label="Kontrol Edilebilir Select" 
+  placeholder="Seçim yapın"
+  clearable&gt;
+  &lt;rdm-select-option value="red"&gt;Kırmızı&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="green"&gt;Yeşil&lt;/rdm-select-option&gt;
+  &lt;rdm-select-option value="blue"&gt;Mavi&lt;/rdm-select-option&gt;
+&lt;/rdm-select&gt;
+
+&lt;div class="button-group"&gt;
+  &lt;button onclick="apiSelect.open()"&gt;Aç&lt;/button&gt;
+  &lt;button onclick="apiSelect.close()"&gt;Kapat&lt;/button&gt;
+  &lt;button onclick="apiSelect.value = 'green'"&gt;Yeşil Seç&lt;/button&gt;
+  &lt;button onclick="apiSelect.clear()"&gt;Temizle&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script&gt;
+const apiSelect = document.getElementById('api-select');
+
+apiSelect.addEventListener('rdm-select', (e) =&gt; {
+  console.log('Seçilen değer:', e.detail.value);
+});
+&lt;/script&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="text-align:center; margin: 40px 0 16px; color: #64748b; font-size: 15px;">
+    <span>© 2025 RDM Select | Yapımcı: Erdem Erciyas | <a href="https://github.com/erdemerciyas/RDM-Select"
+        target="_blank" style="color:#2563eb;">GitHub</a></span>
+  </footer>
+
+  <script src="../components/select/rdm-select.js"></script>
+  <script>
+    // Temel select için options ayarla
+    const basicSelect = document.getElementById('basic-select');
+    basicSelect.options = [
+      { value: 'tr', label: 'Türkiye' },
+      { value: 'us', label: 'Amerika Birleşik Devletleri' },
+      { value: 'de', label: 'Almanya' },
+      { value: 'fr', label: 'Fransa' },
+      { value: 'uk', label: 'Birleşik Krallık' },
+      { value: 'nl', label: 'Hollanda' }
+    ];
+
+    // Arama özellikli select için options
+    const searchSelect = document.getElementById('search-select');
+    searchSelect.options = [
+      { value: 'js', label: 'JavaScript' },
+      { value: 'ts', label: 'TypeScript' },
+      { value: 'py', label: 'Python' },
+      { value: 'java', label: 'Java' },
+      { value: 'cs', label: 'C#' },
+      { value: 'cpp', label: 'C++' },
+      { value: 'php', label: 'PHP' },
+      { value: 'ruby', label: 'Ruby' },
+      { value: 'go', label: 'Go' },
+      { value: 'rust', label: 'Rust' },
+      { value: 'swift', label: 'Swift' },
+      { value: 'kotlin', label: 'Kotlin' }
+    ];
+
+    // API select referansı
+    const apiSelect = document.getElementById('api-select');
+
+    // Event listeners
+    basicSelect.addEventListener('rdm-select', (e) => {
+      document.getElementById('basic-result').textContent = `Seçilen: ${e.detail.value || '-'}`;
+    });
+
+    apiSelect.addEventListener('rdm-select', (e) => {
+      document.getElementById('api-result').textContent = `Seçilen: ${e.detail.value || '-'}`;
+    });
+
+    // Dinamik validation örneği
+    const dynamicValidation = document.getElementById('dynamic-validation');
+    dynamicValidation.addEventListener('rdm-select', (e) => {
+      const value = e.detail.value;
+
+      if (value === 'good') {
+        dynamicValidation.setAttribute('validation-state', 'success');
+        dynamicValidation.setAttribute('success-text', 'Mükemmel seçim!');
+        dynamicValidation.removeAttribute('warning-text');
+        dynamicValidation.removeAttribute('invalid-text');
+      } else if (value === 'warning') {
+        dynamicValidation.setAttribute('validation-state', 'warning');
+        dynamicValidation.setAttribute('warning-text', 'Bu seçim riskli olabilir.');
+        dynamicValidation.removeAttribute('success-text');
+        dynamicValidation.removeAttribute('invalid-text');
+      } else if (value === 'bad') {
+        dynamicValidation.setAttribute('validation-state', 'invalid');
+        dynamicValidation.setAttribute('invalid-text', 'Bu seçim önerilmez!');
+        dynamicValidation.removeAttribute('success-text');
+        dynamicValidation.removeAttribute('warning-text');
+      } else {
+        dynamicValidation.setAttribute('validation-state', 'default');
+        dynamicValidation.removeAttribute('success-text');
+        dynamicValidation.removeAttribute('warning-text');
+        dynamicValidation.removeAttribute('invalid-text');
+      }
+    });
+
+    // Tüm select'lere genel event listener
+    document.addEventListener('rdm-select', (e) => {
+      console.log('Select değişti:', e.detail);
+    });
+
+    // Kod önizleme toggle fonksiyonu
+    function toggleCodePreview(button) {
+      const codeContent = button.closest('.code-preview').querySelector('.code-preview__content');
+      const isVisible = codeContent.classList.contains('show');
+
+      if (isVisible) {
+        codeContent.classList.remove('show');
+        button.innerHTML = '⌨️ Kod';
+      } else {
+        codeContent.classList.add('show');
+        button.innerHTML = '✖️ Gizle';
+      }
+    }
+
+    // Kod kopyalama fonksiyonu
+    function copyCode(button) {
+      const codeElement = button.closest('.code-preview__content').querySelector('.code-preview__code');
+      const code = codeElement.textContent;
+
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = button.textContent;
+        button.textContent = '✅ Kopyalandı!';
+        button.style.background = '#10b981';
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = 'rgba(255, 255, 255, 0.1)';
+        }, 2000);
+      }).catch(() => {
+        button.textContent = '❌ Hata!';
+        setTimeout(() => {
+          button.textContent = '📋 Kopyala';
+        }, 2000);
+      });
+    }
+
+    // Syntax highlighting fonksiyonu
+    function highlightCode(code) {
+      return code
+        .replace(/(&lt;\/?)([a-zA-Z-]+)/g, '$1<span class="tag">$2</span>')
+        .replace(/([a-zA-Z-]+)=&quot;/g, '<span class="attr-name">$1</span>=&quot;')
+        .replace(/=&quot;([^&quot;]*)&quot;/g, '=&quot;<span class="attr-value">$1</span>&quot;')
+        .replace(/(&lt;!--.*?--&gt;)/g, '<span class="comment">$1</span>');
+    }
+
+    // Sayfa yüklendiğinde kod bloklarını highlight et
+    document.addEventListener('DOMContentLoaded', function () {
+      const codeBlocks = document.querySelectorAll('.code-preview__code');
+      codeBlocks.forEach(block => {
+        const highlighted = highlightCode(block.innerHTML);
+        block.innerHTML = highlighted;
+      });
+    });
+  </script>
+
+  <!-- Attribute Referans Tablosu -->
+  <div class="demo-section">
+    <h3>Attribute Referansı</h3>
+    <p>rdm-select bileşeninde kullanabileceğiniz tüm attribute'lar ve açıklamaları:</p>
+
+    <div class="table-container">
+      <table class="reference-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Tip</th>
+            <th>Varsayılan</th>
+            <th>Açıklama</th>
+            <th>Örnek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="attr-name">name</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Form alanının adı</td>
+            <td class="attr-example">name="country"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">value</td>
+            <td>string</td>
+            <td>null</td>
+            <td>Seçili değer</td>
+            <td class="attr-example">value="turkey"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">label</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Üst etiket metni</td>
+            <td class="attr-example">label="Ülke Seçin"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">placeholder</td>
+            <td>string</td>
+            <td>"Select an option"</td>
+            <td>Placeholder metni</td>
+            <td class="attr-example">placeholder="Seçim yapın"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">size</td>
+            <td>small | medium | large</td>
+            <td>medium</td>
+            <td>Bileşen boyutu</td>
+            <td class="attr-example">size="large"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">required</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Zorunlu alan (label'da * gösterir)</td>
+            <td class="attr-example">required</td>
+          </tr>
+          <tr>
+            <td class="attr-name">disabled</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Devre dışı durumu</td>
+            <td class="attr-example">disabled</td>
+          </tr>
+          <tr>
+            <td class="attr-name">clearable</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Temizle butonu gösterir</td>
+            <td class="attr-example">clearable</td>
+          </tr>
+          <tr>
+            <td class="attr-name">multiple</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Çoklu seçim modu</td>
+            <td class="attr-example">multiple</td>
+          </tr>
+          <tr>
+            <td class="attr-name">search-bar</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Arama çubuğu ekler</td>
+            <td class="attr-example">search-bar</td>
+          </tr>
+          <tr>
+            <td class="attr-name">search-bar-placeholder</td>
+            <td>string</td>
+            <td>"Search..."</td>
+            <td>Arama çubuğu placeholder'ı</td>
+            <td class="attr-example">search-bar-placeholder="Ara..."</td>
+          </tr>
+          <tr>
+            <td class="attr-name">search-not-found-text</td>
+            <td>string</td>
+            <td>"No results found"</td>
+            <td>Sonuç bulunamadı metni</td>
+            <td class="attr-example">search-not-found-text="Bulunamadı"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">option-borders</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Seçenekler arası çizgi</td>
+            <td class="attr-example">option-borders</td>
+          </tr>
+          <tr>
+            <td class="attr-name">option-style</td>
+            <td>default | checkbox | radio</td>
+            <td>default</td>
+            <td>Seçenek görünüm stili</td>
+            <td class="attr-example">option-style="checkbox"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">validation-state</td>
+            <td>default | invalid | warning | success</td>
+            <td>default</td>
+            <td>Validation durumu</td>
+            <td class="attr-example">validation-state="invalid"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">help-text</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Yardım metni (gri)</td>
+            <td class="attr-example">help-text="Bu alan zorunludur"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">invalid-text</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Hata mesajı (kırmızı)</td>
+            <td class="attr-example">invalid-text="Geçersiz seçim!"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">warning-text</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Uyarı mesajı (turuncu)</td>
+            <td class="attr-example">warning-text="Dikkat gerekli!"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">success-text</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Başarı mesajı (yeşil)</td>
+            <td class="attr-example">success-text="Başarılı!"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">icon</td>
+            <td>string</td>
+            <td>-</td>
+            <td>Custom icon (emoji veya text)</td>
+            <td class="attr-example">icon="🌍"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">icon-class</td>
+            <td>string</td>
+            <td>-</td>
+            <td>CSS class ile icon (Font Awesome vb.)</td>
+            <td class="attr-example">icon-class="fas fa-user"</td>
+          </tr>
+          <tr>
+            <td class="attr-name">icon-position</td>
+            <td>left | right</td>
+            <td>left</td>
+            <td>Icon konumu</td>
+            <td class="attr-example">icon-position="right"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      style="margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
+      <h3 style="margin: 0 0 15px 0; color: #1e293b; font-size: 18px;">JavaScript API Metodları</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.open()</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Dropdown'ı açar</p>
+        </div>
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.close()</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Dropdown'ı kapatır</p>
+        </div>
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.clear()</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Seçimi temizler</p>
+        </div>
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.focus()</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Elemente odaklanır</p>
+        </div>
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.value</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Değeri alır/ayarlar</p>
+        </div>
+        <div>
+          <code
+            style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; color: #3730a3; font-weight: 500;">element.options</code>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b;">Seçenekleri ayarlar</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="margin-top: 20px; padding: 20px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+      <h3 style="margin: 0 0 10px 0; color: #92400e; font-size: 18px;">Event Dinleme</h3>
+      <code
+        style="background: #fbbf24; color: #92400e; padding: 8px 12px; border-radius: 4px; display: block; font-size: 14px;">
+        element.addEventListener('rdm-select', (e) => {<br>
+        &nbsp;&nbsp;console.log('Seçilen değer:', e.detail.value);<br>
+        });
+      </code>
+    </div>
+  </div>
+
+      <!-- JavaScript -->
+    <script src="../shared/components/navigation.js"></script>
+    <script src="../components/select/rdm-select.js"></script>
 </body>
-</html> 
+
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Grid - RDM Components</title>
+    <link rel="stylesheet" href="../shared/styles/theme.css">
+    <link rel="stylesheet" href="../components/table/rdm-cardgrid.css">
+    <style>
+        /* Page Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Demo Header */
+        .demo-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .demo-nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .demo-nav-link:hover {
+            color: #1e293b;
+        }
+
+        .demo-nav-link.active {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Demo Content */
+        .demo-content {
+            padding: 2rem;
+        }
+
+        /* Feature Cards */
+        .feature-cards {
+            max-width: 1400px;
+            margin: 0 auto 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-header {
+                padding: 1rem;
+            }
+
+            .demo-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .demo-nav-links {
+                gap: 1rem;
+            }
+
+            .demo-content {
+                padding: 1rem;
+            }
+
+            .feature-cards {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Code Preview Styles */
+        .code-preview {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .code-preview__header {
+            background: rgba(248, 250, 252, 0.9);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .code-preview__title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .code-preview__toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .code-preview__toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+                 .code-preview__content {
+             max-height: 0;
+             overflow: auto;
+             transition: max-height 0.3s ease;
+             position: relative;
+         }
+
+        .code-preview__content.show {
+            max-height: 600px;
+        }
+
+        .code-preview__code {
+            background: #ffffff;
+            padding: 1.5rem;
+            margin: 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #1e293b;
+            white-space: pre-wrap;
+            border: none;
+            overflow-x: auto;
+        }
+
+        .code-preview__copy {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .code-preview__copy:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+
+    <main class="demo-content">
+        <!-- Feature Cards -->
+        <div class="feature-cards">
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h3 class="feature-title">Modern Kart Tasarımı</h3>
+                <p class="feature-description">Şık gradient efektleri, hover animasyonları ve modern tipografi ile tasarlanmış kart görünümü.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔍</span>
+                <h3 class="feature-title">Anlık Arama</h3>
+                <p class="feature-description">Tüm alanlarda anlık arama yapabilir, sonuçları gerçek zamanlı olarak filtreleyebilirsiniz.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Hızlı Sıralama</h3>
+                <p class="feature-description">Ad, departman, maaş ve tarih bazında çift yönlü sıralama desteği.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3 class="feature-title">Responsive Tasarım</h3>
+                <p class="feature-description">Mobil, tablet ve masaüstü cihazlarda mükemmel görünüm ve kullanım deneyimi.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎭</span>
+                <h3 class="feature-title">Görünüm Modları</h3>
+                <p class="feature-description">Kart ve liste görünümü arasında geçiş yaparak verilerinizi farklı şekillerde görüntüleyin.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚙️</span>
+                <h3 class="feature-title">Kolay Entegrasyon</h3>
+                <p class="feature-description">Tek satır kod ile projenize entegre edin, özelleştirilebilir API ile kontrol edin.</p>
+            </div>
+        </div>
+
+        <!-- Card Grid Table -->
+        <div id="cardGridTable"></div>
+
+        <!-- HTML Code Preview -->
+        <div class="code-preview" style="margin-top: 2rem;">
+            <div class="code-preview__header">
+                <h5 class="code-preview__title">HTML + CSS + JavaScript Kodu</h5>
+                <button class="code-preview__toggle" onclick="toggleCodePreview(this)">⌨️ Kod</button>
+            </div>
+            <div class="code-preview__content">
+                <button class="code-preview__copy" onclick="copyCode(this)">📋 Kopyala</button>
+                <pre class="code-preview__code">&lt;!-- HTML Structure --&gt;
+&lt;div id="cardGridTable"&gt;&lt;/div&gt;
+
+&lt;!-- CSS Imports --&gt;
+&lt;link rel="stylesheet" href="../components/table/rdm-cardgrid.css"&gt;
+
+&lt;!-- JavaScript --&gt;
+&lt;script src="../components/table/rdm-cardgrid.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+// Card Grid JavaScript ile oluşturulur
+document.addEventListener('DOMContentLoaded', function() {
+    const cardGrid = new RDMCardGrid('cardGridTable', {
+        itemsPerPage: 12,        // Sayfa başına kart sayısı
+        searchable: true,        // Arama özelliği
+        sortable: true,          // Sıralama özelliği
+        pagination: true,        // Sayfalama
+        showHeader: true,        // Başlık göster
+        showToolbar: true        // Araç çubuğu göster
+    });
+});
+
+// ✅ Özellikler:
+// - Modern kart tasarımı
+// - Anlık arama ve filtreleme
+// - Çift yönlü sıralama (ad, departman, maaş, tarih)
+// - Responsive tasarım
+// - Görünüm modları (kart/liste)
+// - Sayfalama sistemi
+// - Hover animasyonları
+
+// 🎮 Klavye Kısayolları:
+// Ctrl+F - Arama kutusuna odaklan
+&lt;/script&gt;</pre>
+            </div>
+        </div>
+    </main>
+
+          <script src="../shared/components/navigation.js"></script>
+      <script src="../components/table/rdm-cardgrid.js"></script>
+    <script>
+        // Initialize Card Grid Table
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardGrid = new RDMCardGrid('cardGridTable', {
+                itemsPerPage: 12,
+                searchable: true,
+                sortable: true,
+                pagination: true,
+                showHeader: true,
+                showToolbar: true
+            });
+
+            // Demo: Add some custom data after initialization
+            setTimeout(() => {
+                console.log('🎴 Card Grid initialized with', cardGrid.getData().length, 'records');
+                console.log('📊 Available methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(cardGrid)));
+            }, 2000);
+
+            // Demo: Custom event handling
+            window.cardGridInstance = cardGrid; // For console debugging
+        });
+
+        // Demo: Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Focus search on Ctrl+F or Cmd+F
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+        });
+
+        // Demo: Performance monitoring
+        const observer = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                if (entry.entryType === 'measure') {
+                    console.log(`📊 ${entry.name}: ${entry.duration.toFixed(2)}ms`);
+                }
+            }
+        });
+        observer.observe({ entryTypes: ['measure'] });
+
+        // Code preview functions
+        function toggleCodePreview(button) {
+            const codeContent = button.closest('.code-preview').querySelector('.code-preview__content');
+            const isVisible = codeContent.classList.contains('show');
+
+            if (isVisible) {
+                codeContent.classList.remove('show');
+                button.innerHTML = '⌨️ Kod';
+            } else {
+                codeContent.classList.add('show');
+                button.innerHTML = '✖️ Gizle';
+            }
+        }
+
+        function copyCode(button) {
+            const codeElement = button.closest('.code-preview__content').querySelector('.code-preview__code');
+            const code = codeElement.textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✅ Kopyalandı!';
+                button.style.background = '#10b981';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            }).catch(() => {
+                button.textContent = '❌ Hata!';
+                setTimeout(() => {
+                    button.textContent = '📋 Kopyala';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,467 +1,336 @@
-class RDMTable extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
+// Sticky header sistemi için global değişkenler
+let globalStickyHeader = null;
+let globalIsSticky = false;
+
+// Tablo verilerini oluştur
+function generateTableData() {
+    const table = document.getElementById('dataTable');
     
-    // Internal state
-    this._data = [];
-    this._columns = [];
-    this._currentPage = 1;
-    this._itemsPerPage = 10;
-    this._sortField = null;
-    this._sortDirection = 'asc';
-    this._searchTerm = '';
-    this._validationState = null;
-    this._validationMessage = '';
-  }
-
-  static get observedAttributes() {
-    return [
-      'data',
-      'columns',
-      'sortable',
-      'searchable',
-      'pageable',
-      'items-per-page',
-      'validation',
-      'validation-message',
-      'loading'
-    ];
-  }
-
-  // Getters and setters for properties
-  get data() {
-    return this._data;
-  }
-
-  set data(value) {
-    this._data = Array.isArray(value) ? value : [];
-    this.render();
-  }
-
-  get columns() {
-    return this._columns;
-  }
-
-  set columns(value) {
-    this._columns = Array.isArray(value) ? value : [];
-    this.render();
-  }
-
-  // Lifecycle callbacks
-  connectedCallback() {
-    this.render();
-    this._addEventListeners();
-  }
-
-  disconnectedCallback() {
-    this._removeEventListeners();
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue) return;
-
-    switch (name) {
-      case 'data':
-        try {
-          this.data = JSON.parse(newValue);
-        } catch (e) {
-          console.error('Invalid data format:', e);
-        }
-        break;
-      case 'columns':
-        try {
-          this.columns = JSON.parse(newValue);
-        } catch (e) {
-          console.error('Invalid columns format:', e);
-        }
-        break;
-      case 'items-per-page':
-        this._itemsPerPage = parseInt(newValue) || 10;
-        this.render();
-        break;
-      case 'validation':
-        this._validationState = newValue;
-        this._updateValidation();
-        break;
-      case 'validation-message':
-        this._validationMessage = newValue;
-        this._updateValidation();
-        break;
-      case 'loading':
-        this._updateLoadingState(newValue !== null);
-        break;
-    }
-  }
-
-  // Private methods
-  _addEventListeners() {
-    this.shadowRoot.addEventListener('click', this._handleClick.bind(this));
-    if (this.hasAttribute('searchable')) {
-      const searchInput = this.shadowRoot.querySelector('.rdm-table-search input');
-      if (searchInput) {
-        searchInput.addEventListener('input', this._handleSearch.bind(this));
-      }
-    }
-  }
-
-  _removeEventListeners() {
-    this.shadowRoot.removeEventListener('click', this._handleClick.bind(this));
-    if (this.hasAttribute('searchable')) {
-      const searchInput = this.shadowRoot.querySelector('.rdm-table-search input');
-      if (searchInput) {
-        searchInput.removeEventListener('input', this._handleSearch.bind(this));
-      }
-    }
-  }
-
-  _handleClick(event) {
-    const target = event.target;
+    // Mevcut sticky header'ı temizle
+    cleanupStickyHeader();
     
-    // Handle sortable column headers
-    if (target.closest('th.sortable')) {
-      const field = target.closest('th').dataset.field;
-      this._handleSort(field);
-    }
-    
-    // Handle pagination
-    if (target.closest('.rdm-table-pagination button')) {
-      const action = target.closest('button').dataset.action;
-      this._handlePagination(action);
-    }
-  }
-
-  _handleSort(field) {
-    if (this._sortField === field) {
-      this._sortDirection = this._sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this._sortField = field;
-      this._sortDirection = 'asc';
-    }
-    
-    this._data.sort((a, b) => {
-      const aVal = a[field];
-      const bVal = b[field];
-      
-      if (aVal === bVal) return 0;
-      
-      const comparison = aVal > bVal ? 1 : -1;
-      return this._sortDirection === 'asc' ? comparison : -comparison;
-    });
-    
-    this.render();
-  }
-
-  _handleSearch(event) {
-    this._searchTerm = event.target.value.toLowerCase();
-    this._currentPage = 1;
-    this.render();
-  }
-
-  _handlePagination(action) {
-    const totalPages = Math.ceil(this._getFilteredData().length / this._itemsPerPage);
-    
-    switch (action) {
-      case 'first':
-        this._currentPage = 1;
-        break;
-      case 'prev':
-        this._currentPage = Math.max(1, this._currentPage - 1);
-        break;
-      case 'next':
-        this._currentPage = Math.min(totalPages, this._currentPage + 1);
-        break;
-      case 'last':
-        this._currentPage = totalPages;
-        break;
-    }
-    
-    this.render();
-  }
-
-  _getFilteredData() {
-    if (!this._searchTerm) return this._data;
-    
-    return this._data.filter(item =>
-      Object.values(item).some(val =>
-        String(val).toLowerCase().includes(this._searchTerm)
-      )
-    );
-  }
-
-  _getPaginatedData() {
-    const filteredData = this._getFilteredData();
-    const start = (this._currentPage - 1) * this._itemsPerPage;
-    return filteredData.slice(start, start + this._itemsPerPage);
-  }
-
-  _updateValidation() {
-    const table = this.shadowRoot.querySelector('table');
-    if (!table) return;
-
-    // Remove existing validation classes
-    table.classList.remove('is-valid', 'is-invalid', 'has-warning');
-
-    // Add new validation class
-    switch (this._validationState) {
-      case 'success':
-        table.classList.add('is-valid');
-        break;
-      case 'error':
-        table.classList.add('is-invalid');
-        break;
-      case 'warning':
-        table.classList.add('has-warning');
-        break;
-    }
-
-    // Update validation message
-    const messageElement = this.shadowRoot.querySelector('.validation-message');
-    if (messageElement) {
-      messageElement.textContent = this._validationMessage;
-    }
-  }
-
-  _updateLoadingState(isLoading) {
-    const table = this.shadowRoot.querySelector('table');
-    if (!table) return;
-
-    if (isLoading) {
-      table.classList.add('is-loading');
-      // Add loading spinner
-      const loadingSpinner = document.createElement('div');
-      loadingSpinner.className = 'loading-spinner';
-      loadingSpinner.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      this.shadowRoot.appendChild(loadingSpinner);
-    } else {
-      table.classList.remove('is-loading');
-      // Remove loading spinner
-      const loadingSpinner = this.shadowRoot.querySelector('.loading-spinner');
-      if (loadingSpinner) {
-        loadingSpinner.remove();
-      }
-    }
-  }
-
-  _getValidationIcon() {
-    switch (this._validationState) {
-      case 'success':
-        return '<i class="fas fa-circle-check"></i>';
-      case 'error':
-        return '<i class="fas fa-circle-xmark"></i>';
-      case 'warning':
-        return '<i class="fas fa-triangle-exclamation"></i>';
-      default:
-        return '';
-    }
-  }
-
-  // Render methods
-  render() {
-    const style = document.createElement('style');
-    style.textContent = `
-      @import url('../../shared/styles/variables.css');
-      @import url('../../shared/styles/common.css');
-      @import url('./rdm-table.css');
-
-      :host {
-        display: block;
-        margin: var(--rdm-spacing-md) 0;
-      }
-
-      .rdm-table-container {
-        position: relative;
-        overflow-x: auto;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: var(--rdm-light-color);
-        border: 1px solid var(--rdm-border-color);
-        font-family: var(--rdm-font-family);
-      }
-
-      th, td {
-        padding: var(--rdm-spacing-sm) var(--rdm-spacing-md);
-        border: 1px solid var(--rdm-border-color);
-      }
-
-      th {
-        background: var(--rdm-secondary-color);
-        color: var(--rdm-light-color);
-        font-weight: bold;
-        text-align: left;
-      }
-
-      th.sortable {
-        cursor: pointer;
-        user-select: none;
-      }
-
-      th.sortable:hover {
-        background: var(--rdm-primary-color);
-      }
-
-      tr:nth-child(even) {
-        background: rgba(0, 0, 0, 0.02);
-      }
-
-      tr:hover {
-        background: rgba(0, 123, 255, 0.05);
-      }
-
-      .validation-message {
-        margin-top: var(--rdm-spacing-sm);
-        display: flex;
-        align-items: center;
-        gap: var(--rdm-spacing-sm);
-      }
-
-      .validation-message i {
-        font-size: 1.2em;
-      }
-
-      .is-valid .validation-message {
-        color: var(--rdm-success-color);
-      }
-
-      .is-invalid .validation-message {
-        color: var(--rdm-danger-color);
-      }
-
-      .has-warning .validation-message {
-        color: var(--rdm-warning-color);
-      }
-
-      .loading-spinner {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2em;
-        color: var(--rdm-primary-color);
-      }
-
-      .is-loading {
-        opacity: 0.5;
-      }
-    `;
-
-    const container = document.createElement('div');
-    container.className = 'rdm-table-container';
-
-    // Add search if searchable
-    if (this.hasAttribute('searchable')) {
-      container.appendChild(this._renderSearch());
-    }
-
-    // Add table
-    container.appendChild(this._renderTable());
-
-    // Add pagination if pageable
-    if (this.hasAttribute('pageable')) {
-      container.appendChild(this._renderPagination());
-    }
-
-    // Add validation message if needed
-    if (this._validationState && this._validationMessage) {
-      const validationMessage = document.createElement('div');
-      validationMessage.className = 'validation-message';
-      validationMessage.innerHTML = `${this._getValidationIcon()} ${this._validationMessage}`;
-      container.appendChild(validationMessage);
-    }
-
-    this.shadowRoot.innerHTML = '';
-    this.shadowRoot.appendChild(style);
-    this.shadowRoot.appendChild(container);
-  }
-
-  _renderSearch() {
-    const searchContainer = document.createElement('div');
-    searchContainer.className = 'rdm-table-search';
-    searchContainer.innerHTML = `
-      <input type="text" 
-             placeholder="Search..." 
-             value="${this._searchTerm}"
-             aria-label="Search table contents">
-    `;
-    return searchContainer;
-  }
-
-  _renderTable() {
-    const table = document.createElement('table');
-    table.className = 'rdm-element';
-    
-    // Add header
+    // Header oluştur
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
     
-    this._columns.forEach(column => {
-      const th = document.createElement('th');
-      th.textContent = column.header;
-      th.dataset.field = column.field;
-      
-      if (this.hasAttribute('sortable')) {
-        th.classList.add('sortable');
-        if (this._sortField === column.field) {
-          th.classList.add(`sorted-${this._sortDirection}`);
-        }
-      }
-      
-      headerRow.appendChild(th);
+    // Sütun başlıkları
+    const columns = ['ID', 'Isim', 'Soyisim', 'Email', 'Telefon', 'Şehir', 'Yaş', 'Meslek', 'Maaş', 'Departman',
+                   'Başlangıç Tarihi', 'Doğum Tarihi', 'Cinsiyet', 'Medeni Durum', 'Eğitim', 'Deneyim', 
+                   'Proje Sayısı', 'Performans', 'Bonus', 'Sicil No', 'Vardiya', 'Lokasyon', 'Manager',
+                   'Sertifika', 'Dil', 'Yetenek', 'Hobi', 'Acil Durum', 'Kan Grubu', 'Sigorta',
+                   'Banka Hesap', 'IBAN', 'Vergi No', 'SGK No', 'Adres', 'Posta Kodu', 'Ülke',
+                   'Notlar', 'Durum', 'Son Güncelleme'];
+    
+    columns.forEach(column => {
+        const th = document.createElement('th');
+        th.textContent = column;
+        headerRow.appendChild(th);
     });
     
     thead.appendChild(headerRow);
     table.appendChild(thead);
     
-    // Add body
+    // Body oluştur
     const tbody = document.createElement('tbody');
-    const dataToShow = this.hasAttribute('pageable') ? 
-      this._getPaginatedData() : 
-      this._getFilteredData();
     
-    dataToShow.forEach(item => {
-      const row = document.createElement('tr');
-      this._columns.forEach(column => {
-        const td = document.createElement('td');
-        td.textContent = item[column.field];
-        row.appendChild(td);
-      });
-      tbody.appendChild(row);
-    });
+    // 200 satır veri oluştur
+    for (let i = 1; i <= 200; i++) {
+        const row = document.createElement('tr');
+        
+        // Her sütun için veri oluştur
+        const rowData = [
+            i.toString().padStart(3, '0'),
+            `İsim${i}`,
+            `Soyisim${i}`,
+            `kullanici${i}@email.com`,
+            `+90 5${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`,
+            ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya'][Math.floor(Math.random() * 5)],
+            Math.floor(Math.random() * 40) + 22,
+            ['Yazılım Geliştirici', 'Veri Analisti', 'Proje Yöneticisi', 'Tasarımcı', 'Test Uzmanı'][Math.floor(Math.random() * 5)],
+            `${(Math.floor(Math.random() * 50000) + 15000).toLocaleString('tr-TR')} ₺`,
+            ['IT', 'İnsan Kaynakları', 'Pazarlama', 'Satış', 'Muhasebe'][Math.floor(Math.random() * 5)],
+            `${Math.floor(Math.random() * 28) + 1}.${Math.floor(Math.random() * 12) + 1}.${Math.floor(Math.random() * 5) + 2020}`,
+            `${Math.floor(Math.random() * 28) + 1}.${Math.floor(Math.random() * 12) + 1}.${Math.floor(Math.random() * 30) + 1980}`,
+            ['Erkek', 'Kadın'][Math.floor(Math.random() * 2)],
+            ['Bekar', 'Evli', 'Boşanmış'][Math.floor(Math.random() * 3)],
+            ['Lisans', 'Yüksek Lisans', 'Doktora', 'Lise'][Math.floor(Math.random() * 4)],
+            `${Math.floor(Math.random() * 15) + 1} yıl`,
+            Math.floor(Math.random() * 20) + 1,
+            `${Math.floor(Math.random() * 100) + 1}%`,
+            `${Math.floor(Math.random() * 10000)} ₺`,
+            `EMP${i.toString().padStart(4, '0')}`,
+            ['Gündüz', 'Gece', 'Vardiyalı'][Math.floor(Math.random() * 3)],
+            ['Merkez', 'Şube A', 'Şube B', 'Uzaktan'][Math.floor(Math.random() * 4)],
+            `Manager${Math.floor(Math.random() * 20) + 1}`,
+            ['PMP', 'SCRUM', 'AWS', 'Azure', 'Yok'][Math.floor(Math.random() * 5)],
+            ['İngilizce', 'Almanca', 'Fransızca', 'İspanyolca'][Math.floor(Math.random() * 4)],
+            ['JavaScript', 'Python', 'Java', 'C#', 'PHP'][Math.floor(Math.random() * 5)],
+            ['Spor', 'Müzik', 'Okuma', 'Seyahat', 'Fotoğrafçılık'][Math.floor(Math.random() * 5)],
+            `+90 5${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`,
+            ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'][Math.floor(Math.random() * 8)],
+            ['Var', 'Yok'][Math.floor(Math.random() * 2)],
+            `TR${Math.floor(Math.random() * 1000000000000000000)}`,
+            `TR${Math.floor(Math.random() * 100000000000000000000000000)}`,
+            `${Math.floor(Math.random() * 90000000000) + 10000000000}`,
+            `${Math.floor(Math.random() * 900000000) + 100000000}`,
+            `Adres ${i}, Sokak No: ${Math.floor(Math.random() * 100) + 1}`,
+            `${Math.floor(Math.random() * 90000) + 10000}`,
+            'Türkiye',
+            `Not ${i} - Özel bilgiler`,
+            ['Aktif', 'Pasif', 'İzinli'][Math.floor(Math.random() * 3)],
+            `${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR')}`
+        ];
+        
+        rowData.forEach(cellData => {
+            const td = document.createElement('td');
+            td.textContent = cellData;
+            row.appendChild(td);
+        });
+        
+        tbody.appendChild(row);
+    }
     
     table.appendChild(tbody);
-    return table;
-  }
-
-  _renderPagination() {
-    const filteredData = this._getFilteredData();
-    const totalPages = Math.ceil(filteredData.length / this._itemsPerPage);
-    
-    const pagination = document.createElement('div');
-    pagination.className = 'rdm-table-pagination';
-    
-    pagination.innerHTML = `
-      <button data-action="first" ${this._currentPage === 1 ? 'disabled' : ''}>
-        <i class="fas fa-angles-left"></i>
-      </button>
-      <button data-action="prev" ${this._currentPage === 1 ? 'disabled' : ''}>
-        <i class="fas fa-angle-left"></i>
-      </button>
-      <span class="current-page">
-        Page ${this._currentPage} of ${totalPages}
-      </span>
-      <button data-action="next" ${this._currentPage === totalPages ? 'disabled' : ''}>
-        <i class="fas fa-angle-right"></i>
-      </button>
-      <button data-action="last" ${this._currentPage === totalPages ? 'disabled' : ''}>
-        <i class="fas fa-angles-right"></i>
-      </button>
-    `;
-    
-    return pagination;
-  }
 }
 
-customElements.define('rdm-table', RDMTable); 
+// Sticky header temizleme fonksiyonu
+function cleanupStickyHeader() {
+    // Tüm mevcut sticky header'ları bul ve temizle
+    const existingStickyHeaders = document.querySelectorAll('.sticky-header');
+    existingStickyHeaders.forEach(header => {
+        if (header.parentNode) {
+            header.parentNode.removeChild(header);
+        }
+    });
+    
+    // Global değişkenleri sıfırla
+    globalStickyHeader = null;
+    globalIsSticky = false;
+    
+    // Mevcut event listener'ları temizle
+    const oldHandlers = window.stickyHeaderHandlers || [];
+    oldHandlers.forEach(handler => {
+        window.removeEventListener('scroll', handler);
+        const tableWrapper = document.querySelector('.table-wrapper');
+        if (tableWrapper) {
+            tableWrapper.removeEventListener('scroll', handler);
+        }
+        window.removeEventListener('resize', handler);
+    });
+    window.stickyHeaderHandlers = [];
+}
+
+// Sticky header fonksiyonu
+function initStickyHeader() {
+    const table = document.getElementById('dataTable');
+    const thead = table.querySelector('thead');
+    const tbody = table.querySelector('tbody');
+    const tableWrapper = document.querySelector('.table-wrapper');
+    
+    if (!thead || !tableWrapper || !tbody) return;
+    
+    // Global değişkenleri kullan
+    let stickyHeader = globalStickyHeader;
+    let isSticky = globalIsSticky;
+    
+    // Sticky header oluştur
+    function createStickyHeader() {
+        if (stickyHeader) return stickyHeader;
+        
+        // Orijinal thead'i klonla
+        stickyHeader = document.createElement('div');
+        stickyHeader.className = 'sticky-header';
+        
+        // Tablo wrapper'ın aynısını oluştur
+        const stickyTableWrapper = document.createElement('div');
+        stickyTableWrapper.style.overflowX = 'hidden';
+        stickyTableWrapper.style.width = '100%';
+        stickyTableWrapper.style.position = 'relative';
+        
+        // Tablo oluştur
+        const stickyTable = document.createElement('table');
+        stickyTable.style.width = table.style.width || table.offsetWidth + 'px';
+        stickyTable.style.tableLayout = 'fixed';
+        stickyTable.style.borderCollapse = 'separate';
+        stickyTable.style.borderSpacing = '0';
+        stickyTable.style.margin = '0';
+        
+        // Thead klonla
+        const clonedThead = thead.cloneNode(true);
+        stickyTable.appendChild(clonedThead);
+        
+        stickyTableWrapper.appendChild(stickyTable);
+        stickyHeader.appendChild(stickyTableWrapper);
+        
+        // İlk sütun için özel sticky ayarları
+        const firstTh = clonedThead.querySelector('th:first-child');
+        if (firstTh) {
+            firstTh.style.position = 'sticky';
+            firstTh.style.left = '0px';
+            firstTh.style.zIndex = '1001';
+            firstTh.style.background = '#2c3e50';
+            firstTh.style.borderRight = '2px solid #bdc3c7';
+        }
+        
+        // Global değişkeni güncelle
+        globalStickyHeader = stickyHeader;
+        
+        return stickyHeader;
+    }
+    
+    // Sütun genişliklerini senkronize et
+    function syncColumnWidths() {
+        if (!stickyHeader || !isSticky) return;
+        
+        const originalCells = thead.querySelectorAll('th');
+        const stickyCells = stickyHeader.querySelectorAll('th');
+        
+        originalCells.forEach((cell, index) => {
+            if (stickyCells[index]) {
+                const width = cell.getBoundingClientRect().width;
+                stickyCells[index].style.width = width + 'px';
+                stickyCells[index].style.minWidth = width + 'px';
+                stickyCells[index].style.maxWidth = width + 'px';
+            }
+        });
+    }
+    
+    // Tablo pozisyon bilgilerini al
+    function getTableInfo() {
+        const tableRect = table.getBoundingClientRect();
+        const wrapperRect = tableWrapper.getBoundingClientRect();
+        return {
+            tableTop: tableRect.top,
+            tableBottom: tableRect.bottom,
+            wrapperLeft: wrapperRect.left,
+            wrapperWidth: wrapperRect.width,
+            scrollLeft: tableWrapper.scrollLeft,
+            tableWidth: table.offsetWidth
+        };
+    }
+    
+    // Scroll event handler
+    function handleScroll() {
+        const info = getTableInfo();
+        
+        // Tablo görünür alanda mı ve header üstte mi kontrol et
+        if (info.tableTop <= 0 && info.tableBottom > 60) {
+            if (!isSticky) {
+                // Sticky duruma geç
+                isSticky = true;
+                globalIsSticky = true;
+                const sticky = createStickyHeader();
+                
+                // Sticky header'ı sayfaya ekle
+                document.body.appendChild(sticky);
+                
+                // Pozisyon ve boyut ayarları
+                sticky.style.left = info.wrapperLeft + 'px';
+                sticky.style.width = info.wrapperWidth + 'px';
+                
+                // Sütun genişliklerini senkronize et
+                setTimeout(syncColumnWidths, 10);
+                
+                // Original thead'i gizle
+                thead.style.visibility = 'hidden';
+                
+                // Tbody'e padding ekle
+                tbody.style.paddingTop = '60px';
+                
+                // Scroll pozisyonunu senkronize et
+                const stickyTableWrapper = sticky.querySelector('div');
+                stickyTableWrapper.scrollLeft = info.scrollLeft;
+            }
+            
+            // Yatay scroll senkronizasyonu
+            if (isSticky && stickyHeader) {
+                const stickyTableWrapper = stickyHeader.querySelector('div');
+                if (stickyTableWrapper) {
+                    stickyTableWrapper.scrollLeft = info.scrollLeft;
+                    
+                    // İlk sütun sticky pozisyonunu her zaman koru
+                    const firstTh = stickyHeader.querySelector('th:first-child');
+                    if (firstTh) {
+                        firstTh.style.position = 'sticky';
+                        firstTh.style.left = '0px';
+                        firstTh.style.zIndex = '1001';
+                        firstTh.style.background = '#2c3e50';
+                        firstTh.style.borderRight = '2px solid #bdc3c7';
+                    }
+                }
+            }
+        } else {
+            // Normal duruma dön
+            if (isSticky) {
+                isSticky = false;
+                globalIsSticky = false;
+                
+                // Sticky header'ı kaldır
+                if (stickyHeader && stickyHeader.parentNode) {
+                    stickyHeader.parentNode.removeChild(stickyHeader);
+                }
+                
+                // Global değişkeni sıfırla
+                globalStickyHeader = null;
+                stickyHeader = null;
+                
+                // Original thead'i göster
+                thead.style.visibility = 'visible';
+                
+                // Tbody padding'ini kaldır
+                tbody.style.paddingTop = '0';
+            }
+        }
+    }
+    
+    // Yatay scroll event handler
+    function handleHorizontalScroll() {
+        if (isSticky && stickyHeader) {
+            const info = getTableInfo();
+            const stickyTableWrapper = stickyHeader.querySelector('div');
+            if (stickyTableWrapper) {
+                stickyTableWrapper.scrollLeft = info.scrollLeft;
+                
+                // İlk sütun için sticky pozisyonunu koru
+                const firstTh = stickyHeader.querySelector('th:first-child');
+                if (firstTh) {
+                    firstTh.style.position = 'sticky';
+                    firstTh.style.left = '0px';
+                    firstTh.style.zIndex = '1001';
+                    firstTh.style.transform = 'translateX(0px)';
+                }
+            }
+        }
+    }
+    
+    // Resize event handler
+    function handleResize() {
+        if (isSticky) {
+            const info = getTableInfo();
+            if (stickyHeader) {
+                stickyHeader.style.left = info.wrapperLeft + 'px';
+                stickyHeader.style.width = info.wrapperWidth + 'px';
+                syncColumnWidths();
+            }
+        }
+    }
+    
+    // Event listeners'ı kaydet (temizleme için)
+    window.stickyHeaderHandlers = window.stickyHeaderHandlers || [];
+    window.stickyHeaderHandlers.push(handleScroll, handleHorizontalScroll, handleResize);
+    
+    // Event listeners
+    window.addEventListener('scroll', handleScroll);
+    tableWrapper.addEventListener('scroll', handleHorizontalScroll);
+    window.addEventListener('resize', handleResize);
+    
+    // İlk kontrol
+    handleScroll();
+}
+
+// Sayfa yüklendiğinde tabloyu oluştur ve sticky header'ı başlat
+document.addEventListener('DOMContentLoaded', function() {
+    generateTableData();
+    // Tablo oluşturulduktan sonra sticky header'ı başlat
+    setTimeout(initStickyHeader, 100);
+});
